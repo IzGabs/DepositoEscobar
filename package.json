@@ -1,0 +1,29 @@
+{
+  "name": "depositoescobar",
+  "version": "1.0.0",
+  "description": "Trabalho de gerenciamento do Escobar",
+  "main": "index.js",
+  "scripts": {
+    "test": "node src/index.js",
+    "start": "npx cross-env MOD_RUN=PRODUCTION node src/index.js",
+    "dev": "npx cross-env MOD_RUN=DEV_MODE nodemon src/index.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IzGabs/DepositoEscobar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IzGabs/DepositoEscobar/issues"
+  },
+  "homepage": "https://github.com/IzGabs/DepositoEscobar#readme",
+  "dependencies": {
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.4"
+  }
+}
