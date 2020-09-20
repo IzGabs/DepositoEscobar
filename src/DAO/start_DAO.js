@@ -7,7 +7,6 @@ module.exports = () => {
 
     DAO.selectAll = async (param) => {
         console.log(param)
-
         try {
             const result = await mysql.execute(`SELECT * FROM drinks`, [])
             return result
@@ -16,8 +15,6 @@ module.exports = () => {
             return { error: error }
         }
     }
-
-
+    
     return DAO;
-
 }
