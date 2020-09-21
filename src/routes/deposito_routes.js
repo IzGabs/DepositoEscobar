@@ -1,8 +1,6 @@
 const configRoutes = require('express').Router();
-const controller = require('../controller/storage_controller')()
+const controller = require('../controller/deposito_controller')()
 
-
-configRoutes.get('/', controller.initPage)
 
 configRoutes.get('/inf_disp', controller.Informar_Disponibilidade)
 
