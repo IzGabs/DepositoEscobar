@@ -9,11 +9,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const startRoutesConfig = require('./routes/start_routes')
+const servicosRoute = require('./routes/servico_routes')
 
 app.listen(PORT, () => { console.log(`Server running in http://localhost:${PORT}`) })
 
 app.use(express.json())
 app.use('/', startRoutesConfig)
+app.use('/servico', servicosRoute)
+
+
+
 
 app.use((req, res, next) => {
     console.log("Não encontrado")
