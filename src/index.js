@@ -10,15 +10,14 @@ app.use(bodyParser.json());
 
 const startRoutesConfig = require('./routes/start_routes')
 const servicosRoute = require('./routes/servico_routes')
+const depositoRoutes = require('./routes/deposito_routes')
 
 app.listen(PORT, () => { console.log(`Server running in http://localhost:${PORT}`) })
 
 app.use(express.json())
 app.use('/', startRoutesConfig)
 app.use('/servico', servicosRoute)
-
-
-
+app.use('/deposito', depositoRoutes)
 
 app.use((req, res, next) => {
     console.log("Não encontrado")
