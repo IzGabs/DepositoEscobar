@@ -1,0 +1,20 @@
+POST http://localhost:3333/servico/RealizarCompra
+
+###
+POST http://localhost:3333/servico/Venda
+
+###
+
+POST http://localhost:3333/servico/Perda
+
+###
+
+POST http://localhost:3333/servico/Devolucao
+
+###
+
+POST http://localhost:3333/servico/Ajuste
+
+###
+
+GET http://localhost:3333/servico/ListarDepositos/1
