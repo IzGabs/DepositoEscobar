@@ -2,13 +2,9 @@ const configRoutes = require('express').Router();
 const controller = require('../controller/deposito_controller')()
 
 
-<<<<<<< HEAD
 configRoutes.get('/', controller.initPage)
 
 configRoutes.get('/informarDisponibilidade', controller.Informar_Disponibilidade)
-=======
-configRoutes.get('/inf_disp', controller.Informar_Disponibilidade)
->>>>>>> 82cefa324a51402798ee2ee49c943e738c946353
 
 configRoutes.get('/produtosArmazenados', controller.Produtos_Armazenados)
 
