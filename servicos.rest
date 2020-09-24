@@ -1,4 +1,16 @@
-POST http://localhost:3333/servico/RealizarCompra
+POST http://localhost:3333/servico/RealizarCompra 
+Content-Type: application/json
+
+{
+  "id_fornecedor" : 1, "id_estoque" : 1, 
+  "compra" : [
+    {"id_produto" : 1, "quantidade" : 2},
+    {"id_produto" : 1, "quantidade" : 4},
+    {"id_produto" : 1, "quantidade" : 5},
+    {"id_produto" : 1, "quantidade" : 6}
+  ]
+}
+
 
 ###
 POST http://localhost:3333/servico/Venda
@@ -18,3 +30,6 @@ POST http://localhost:3333/servico/Ajuste
 ###
 
 GET http://localhost:3333/servico/ListarDepositos/1
+ 
+###
+
