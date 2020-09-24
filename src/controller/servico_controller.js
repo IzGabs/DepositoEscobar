@@ -7,11 +7,13 @@ module.exports = () => {
 
     ///Quando o usuario deseja realizar uma compra
     controller.SeCompra = (req, res) => {
-        if (req.body != undefined && req.body != []) {
-            if (req.body.id == null) {
-                dao.Compra(req.body);
-            } res.status(400).send(`Precisa do ID da filial`)
-        } res.status(400).send(`Precisa passar os itens que precisa comprar`)
+        if (req.body != undefined) {
+            if (req.body.id_fornecedor != null && req.body.id_estoque != null) {
+                dao.Compra(req.body)
+                    .catch((err) => { res.status(404).send(err) })
+                    .then((value) => { res.status(200).send(value) })
+            } else res.status(400).send(`Precisa do ID do produto`)
+        } else res.status(400).send(`Precisa passar os itens que precisa comprar`)
     }
 
 
@@ -19,14 +21,14 @@ module.exports = () => {
     controller.SeVenda = (req, res) => {
         if (req.body != undefined) {
             res.send(`sucess`)
-        } res.status(400).send(`Precisa informar os dados a serem cadastrados`)
+        } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
     }
 
     ///Quando realizar uma solicitacao para consumo interno
     controller.SeConsumoInterno = (req, res) => {
         if (req.body != undefined) {
             res.send(`sucess`)
-        } res.status(400).send(`Precisa informar os dados a serem cadastrados`)
+        } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
     }
 
 
@@ -34,21 +36,21 @@ module.exports = () => {
     controller.SePerda = (req, res) => {
         if (req.body != undefined) {
             res.send(`sucess`)
-        } res.status(400).send(`Precisa informar os dados a serem cadastrados`)
+        } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
     }
 
     ///Quando o usuario quer devolver um produto
     controller.SeDevolucao = (req, res) => {
         if (req.body != undefined) {
             res.send(`sucess`)
-        } res.status(400).send(`Precisa informar os dados a serem cadastrados`)
+        } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
     }
 
     /// ?
     controller.SeAjuste = (req, res) => {
         if (req.body != undefined) {
             res.send(`sucess`)
-        } res.status(400).send(`Precisa informar os dados a serem cadastrados`)
+        } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
     }
 
     ///Listar todos os depositos de uma filial
@@ -61,7 +63,7 @@ module.exports = () => {
                 .catch((err) => {
                     res.status(500).send(`ERRO`);
                 });
-        } res.status(400).send(`Precisa informar o id da filial`)
+        } else res.status(400).send(`Precisa informar o id da filial`)
     }
 
 

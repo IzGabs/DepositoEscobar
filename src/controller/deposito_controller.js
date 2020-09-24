@@ -1,5 +1,5 @@
 const mysql = require('../mysql')
-const connectionPool = mysql.getPool()
+const connectionPool = require('../mysql')
 const dao = require('../DAO/start_DAO')()
 
 module.exports = () => {
@@ -20,39 +20,39 @@ module.exports = () => {
     }
 
     controller.Informar_Disponibilidade = (req, res) => {
-        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        if (req.params.id != undefined) { return res.status(200).send({ error: error }) }
         dao.Disponibilidade()
-        .then((result) => {
-            res.status(200).send(result);
-        })
-        .catch((err) => {
-            res.status(500).send(`ERRO`);
-        });
+            .then((result) => {
+                res.status(200).send(result);
+            })
+            .catch((err) => {
+                res.status(500).send(`ERRO`);
+            });
 
     }
 
     controller.Produtos_Armazenados = (req, res) => {
-        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        if (req.params.id != undefined) { return res.status(200).send({ error: error }) }
     }
 
     controller.Cotacao_Produto = (req, res) => {
-        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        if (req.params.id != undefined) { return res.status(200).send({ error: error }) }
     }
 
     controller.Compra_Produto = (req, res) => {
-        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        if (req.params.id != undefined) { return res.status(200).send({ error: error }) }
     }
 
     controller.Encaminhar_Produto = (req, res) => {
-        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        if (req.params.id != undefined) { return res.status(200).send({ error: error }) }
     }
     controller.Informar_Quantidade = (req, res) => {
-        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        if (req.params.id != undefined) { return res.status(200).send({ error: error }) }
     }
-    
+
 
     controller.Registrar_Produto = (req, res) => {
-        
+
     }
 
     return controller;

@@ -6,14 +6,43 @@ module.exports = () => {
     const DAO = {}
 
     ///Quando o usuario deseja realizar uma compra
-    DAO.Compra = async (produtos) => {
+    DAO.Compra = async (body) => {
         try {
-            const listProdutos = []
 
-            return result
+            const fornecedor = await mysql.execute(`SELECT * 
+            FROM FORNECEDOR WHERE IDFORNECEDOR= ?`, [body.id_fornecedor]);
+
+            if (fornecedor.length > 0) {
+                const deposito = await mysql.execute(`SELECT * 
+                FROM estoque WHERE IDESTOQUE= ?`, [body.id_estoque])
+
+                console.log(1);
+
+                if (deposito.length > 0) {
+
+                    console.log(body.compra.length);
+                    for (let index = 0; index < body.compra.length; index++) {
+                        const element = body.compra[index]
+
+                        const produto = await mysql.execute(
+                            `SELECT * FROM PRODUTO WHERE IDPRODUTO= ?`, [element.id_produto])
+
+
+                        const valorTotal = (produto[0].preco_compra * element.quantidade)
+
+                        await mysql.execute('INSERT INTO compra' +
+                            '(Fornecedor_idFornecedor, quantidade, ValorTotal)' +
+                            `VALUES(${body.id_fornecedor}, ${element.quantidade},${valorTotal})`)
+
+                    }
+                    ///GERAR NFC
+                    return { "message": `PEDIDO ENVIADO PARA O FORNECEDOR` }
+                } else { throw `Esse deposito nao existe` }
+            } else { throw `Nao existe esse fornecedor` }
+
         } catch (error) {
-            console.log(error)
-            return { error: error }
+            console.log(`ERRAO ${error}`)
+            throw { error: error }
         }
     }
 
