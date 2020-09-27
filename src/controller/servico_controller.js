@@ -7,20 +7,27 @@ module.exports = () => {
 
     ///Quando o usuario deseja realizar uma compra
     controller.SeCompra = (req, res) => {
-        if (req.body != undefined) {
-            if (req.body.id_fornecedor != null && req.body.id_estoque != null) {
-                dao.Compra(req.body)
-                    .catch((err) => { res.status(404).send(err) })
-                    .then((value) => { res.status(200).send(value) })
-            } else res.status(400).send(`Precisa do ID do produto`)
-        } else res.status(400).send(`Precisa passar os itens que precisa comprar`)
+
+        if (req.body.id_fornecedor != undefined && req.body.id_estoque != undefined) {
+            dao.Compra(req.body)
+                .catch((err) => { res.status(404).send(err) })
+                .then((value) => { res.status(200).send(value) })
+        } else res.status(400).send(`Precisa do ID do estoque, filial e fornecedor`)
     }
 
+    controller.buscarNota = (req, res) => {
+        if (req.params.id != undefined) {
+            dao.buscarNota(req.params.id)
+                .catch((err) => { res.status(404).send(err) })
+                .then((value) => { res.status(200).send(value) })
+        } else req.status(400).send(`INFORME UMA ID`)
+    }
 
     ///Quando o usuário quer fazer uma venda
     controller.SeVenda = (req, res) => {
-        if (req.body != undefined) {
-            res.send(`sucess`)
+        if (req.body != undefined && req.body != []) {
+            if (req.body) {
+            } else { }
         } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
     }
 

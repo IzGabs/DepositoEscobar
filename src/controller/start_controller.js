@@ -14,7 +14,7 @@ module.exports = () => {
                 res.status(500).send(`ERRO`);
             });
 
-            
+
     }
 
     //alo
