@@ -25,10 +25,11 @@ module.exports = () => {
 
     ///Quando o usuário quer fazer uma venda
     controller.SeVenda = (req, res) => {
-        if (req.body != undefined && req.body != []) {
-            if (req.body) {
-            } else { }
-        } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
+        if (req.body.id_filial != undefined && req.body.id_estoque != undefined) {
+            dao.venda(req.body)
+                .catch((err) => { res.status(404).send(err) })
+                .then((value) => { res.status(200).send(value) })
+        } else res.status(400).send(`Id Filial e id estoque sao obrigatorios`)
     }
 
     ///Quando realizar uma solicitacao para consumo interno
