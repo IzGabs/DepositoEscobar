@@ -4,7 +4,7 @@ const controller = require('../controller/servico_controller')()
 
 serviceRoutes.post('/RealizarCompra', controller.SeCompra)
 serviceRoutes.get('/compra/:id', controller.buscarNota)
-serviceRoutes.post('/Venda', controller.SeVenda)
+serviceRoutes.post('/RealizarVenda', controller.SeVenda)
 serviceRoutes.post('/ConsumoInterno', controller.SeConsumoInterno)
 serviceRoutes.post('/Perda', controller.SePerda)
 serviceRoutes.post('/Devolucao', controller.SeDevolucao)

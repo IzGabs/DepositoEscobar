@@ -13,7 +13,16 @@ Content-Type: application/json
 
 
 ###
-Get http://localhost:3333/servico/Compra/1
+POST http://localhost:3333/servico/RealizarVenda
+Content-Type: application/json
+
+{
+  "id_filial" : 1, "id_estoque" : 1,
+  "venda" : [
+     {"id_produto" : 1,  "nome_item" : "Bijuteria 1", "quantidade" : 1, "valor_unitario" : 17.50},
+    {"id_produto" : 2, "nome_item" : "Relogio 1", "quantidade" : 1, "valor_unitario" : 17.50}
+  ]
+}
 
 
 ###
