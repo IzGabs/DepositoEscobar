@@ -39,7 +39,31 @@ Content-Type: application/json
 }
 ###
 
+POST http://localhost:3333/servico/Perda
+Content-Type: application/json
+
+{
+  "id_filial" : 1,
+  "motivo" : "O servico estava parado a muito tempo no estoque e foi perdido",
+  "itens" : [
+     {"id_produto" : 1, "quantidade" : 3},
+     {"id_produto" : 1, "quantidade" : 2}
+  ]
+}
+
+###
+
 POST http://localhost:3333/servico/Devolucao
+Content-Type: application/json
+
+{
+  "id_filial" : 1,
+  "motivo" : "Nao gostei do produto",
+  "itens" : [
+     {"id_produto" : 1, "quantidade" : 3},
+     {"id_produto" : 1, "quantidade" : 2}
+  ]
+}
 
 ###
 

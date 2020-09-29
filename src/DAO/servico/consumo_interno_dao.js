@@ -14,10 +14,11 @@ module.exports = () => {
             //Gerar consumointerno
             const consumo_interno = await mysql.execute('INSERT INTO consumointerno(quantidade) VALUES (?)', [0]);
 
+
             //Select do produto //Validar se ele pertence a aquela filial
             for (const element of body.consumo_interno) {
                 const produto = await mysql.execute('Select * from produto where idProduto   = ? ', [element.id_produto]);
-                if (produto[0].idProduto != body.id_filial) throw `Voce nao tem permissao para adquirir um dos itens`
+                if (produto[0].estoque_filial_idfilial != body.id_filial) throw `Voce nao tem permissao para adquirir um dos itens`
 
                 //gerar item_pedido
                 const item_pedido = await mysql.execute('INSERT INTO item_pedido(produto_idProduto, quantidade, consumointerno_idConsumoInterno)  Values (?, ?, ?)',
