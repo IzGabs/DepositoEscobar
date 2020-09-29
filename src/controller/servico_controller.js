@@ -35,7 +35,9 @@ module.exports = () => {
     ///Quando realizar uma solicitacao para consumo interno
     controller.SeConsumoInterno = (req, res) => {
         if (req.body != undefined) {
-            res.send(`sucess`)
+            dao.consumo_interno(req.body)
+                .catch((err) => { res.status(404).send(err) })
+                .then((value) => { res.status(200).send(value) })
         } else res.status(400).send(`Precisa informar os dados a serem cadastrados`)
     }
 

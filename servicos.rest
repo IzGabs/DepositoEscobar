@@ -27,8 +27,16 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3333/servico/Perda
+POST http://localhost:3333/servico/ConsumoInterno
+Content-Type: application/json
 
+{
+  "id_filial" : 1, "id_estoque" : 1,
+  "consumo_interno" : [
+     {"id_produto" : 1, "quantidade" : 1},
+     {"id_produto" : 1, "quantidade" : 1}
+  ]
+}
 ###
 
 POST http://localhost:3333/servico/Devolucao
