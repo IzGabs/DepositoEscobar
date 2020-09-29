@@ -5,7 +5,7 @@ Content-Type: application/json
   "id_fornecedor" : 1, "id_estoque" : 1, "id_filial" : 1,
   "compra" : [
     {"id_produto" : 1, "quantidade" : 4, "valor_unitario" : 17.50},
-    {"id_produto" : 1, "quantidade" : 4, "valor_unitario" : 17.50},
+    {"id_produto" : 2, "quantidade" : 4, "valor_unitario" : 17.50},
     {"id_produto" : 1, "quantidade" : 4, "valor_unitario" : 17.50},
     {"id_produto" : 1, "quantidade" : 4, "valor_unitario" : 17.50}
      ]

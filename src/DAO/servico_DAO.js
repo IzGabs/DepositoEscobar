@@ -99,6 +99,18 @@ module.exports = () => {
 
                     }
 
+                    for (const element of body.compra) {
+                        await mysql.execute('UPDATE produto SET ' +
+                            'preco_compra = ?, ' +
+                            'quantidade_em_estoque = (quantidade_em_estoque + ?) ' +
+                            'WHERE idProduto = ?',
+                            [
+                                element.valor_unitario,
+                                element.quantidade,
+                                element.id_produto
+                            ])
+                    }
+
                     return {
                         "message": `PEDIDO ENVIADO PARA O FORNECEDOR`,
                         "NOTA_FISCAL": notaFiscal_final,
@@ -124,32 +136,33 @@ module.exports = () => {
             const estoque = await mysql.execute(`Select * from estoque where idestoque  = ?`,
                 [body.id_estoque])
 
-
-
             if (estoque[0].filial_idfilial == body.id_filial) {
                 //Validar se há disponibilidade daqueles produtos no deposito
                 for (const element of body.venda) {
                     const disponibilidade = await mysql.execute(
-                        'SELECT COUNT(idProduto) ' +
+                        'SELECT quantidade_em_estoque ' +
                         'FROM PRODUTO P ' +
                         'INNER JOIN ESTOQUE E ' +
                         'ON P.estoque_idestoque  = E.idestoque ' +
-                        'WHERE p.estoque_idestoque = ? AND p.nome = ? AND status = 1',
+                        'WHERE p.estoque_idestoque = ? AND p.nome = ?',
                         [body.id_estoque, element.nome_item]
                     )
 
-                    if (disponibilidade[0]['COUNT(idProduto)'] >= element.quantidade) {
-                        disponiveis.push(element);
-                    }
-                    else {
-                        indisponiveis.push(
-                            {
-                                "nome_item": element.nome_item,
-                                "quantidade_estoque": disponibilidade[0]['COUNT(idProduto)'],
-                                "quantidade_necessaria_compra": element.quantidade,
-                                "Quantidade_a_comprar": (element.quantidade - disponibilidade[0]['COUNT(idProduto)'])
-                            }
-                        )
+                    if (disponibilidade[0] != undefined) {
+                        if (disponibilidade[0].quantidade_em_estoque >= element.quantidade) {
+                            disponiveis.push(element);
+                        }
+                        else {
+
+                            indisponiveis.push(
+                                {
+                                    "nome_item": element.nome_item,
+                                    "quantidade_estoque": disponibilidade[0].quantidade_em_estoque,
+                                    "quantidade_necessaria_compra": element.quantidade,
+                                    "Quantidade_a_comprar": (element.quantidade - disponibilidade[0].quantidade_em_estoque)
+                                }
+                            )
+                        }
                     }
                 }//FOR OF
 
@@ -205,9 +218,9 @@ module.exports = () => {
                         //Tirar itens do estoque
                         if (element.quantidade > 0) {
                             await mysql.execute('UPDATE produto ' +
-                                'SET status = ? ' +
+                                'SET quantidade_em_estoque = (quantidade_em_estoque - ?) ' +
                                 'WHERE idProduto = ?',
-                                [0, element.id_produto])
+                                [element.quantidade, element.id_produto])
                         }
                     }
 
@@ -226,23 +239,23 @@ module.exports = () => {
 
                 for (const element of body.venda) {
                     const disponibilidade2 = await mysql.execute(
-                        'SELECT COUNT(idProduto) ' +
+                        'SELECT quantidade_em_estoque ' +
                         'FROM PRODUTO P ' +
                         'INNER JOIN ESTOQUE E ' +
                         'ON P.estoque_idestoque  = E.idestoque ' +
-                        'WHERE p.estoque_idestoque = ? AND p.nome = ? AND status = 1 ',
+                        'WHERE p.estoque_idestoque = ? AND p.nome = ?',
                         [body.venda.id_estoque, element.nome_item]
                     )
 
-                    if (disponibilidade2[0]['COUNT(idProduto)'] >= element.quantidade)
+                    if (disponibilidade2[0].quantidade_em_estoque >= element.quantidade)
                         disponiveis.push(element)
                     else {
                         indisponiveis.push(
                             {
                                 "nome_item": element.nome_item,
-                                "quantidade_estoque": disponibilidade2[0]['COUNT(idProduto)'],
+                                "quantidade_estoque": disponibilidade2[0].quantidade_em_estoque,
                                 "quantidade_necessaria_compra": element.quantidade,
-                                "Quantidade_a_comprar": (element.quantidade - disponibilidade2[0]['COUNT(idProduto)'])
+                                "Quantidade_a_comprar": (element.quantidade - disponibilidade2[0].quantidade_em_estoque)
                             }
                         )
                     }
@@ -258,6 +271,7 @@ module.exports = () => {
             }
 
         } catch (error) {
+            console.log(error)
             return { error: error }
         }
     }
