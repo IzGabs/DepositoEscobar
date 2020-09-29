@@ -69,7 +69,6 @@ module.exports = () => {
                             notaFiscal.insertId,
                             body.id_fornecedor
                         ])
-                        console.log(`load`)
                     }
 
                     const data = new Date();
