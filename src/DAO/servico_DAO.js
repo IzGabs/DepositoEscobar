@@ -86,7 +86,6 @@ module.exports = () => {
                         console.log(`load`)
                     }
 
-                    ///Responder com a Nota fical
                     const data = new Date();
                     const notaFiscal_final = {
                         "id_nota": notaFiscal.insertId,
@@ -130,14 +129,11 @@ module.exports = () => {
     DAO.venda = async (body) => {
         let disponiveis = []
         let indisponiveis = []
-
         try {
-
             const estoque = await mysql.execute(`Select * from estoque where idestoque  = ?`,
                 [body.id_estoque])
 
             if (estoque[0].filial_idfilial == body.id_filial) {
-                //Validar se há disponibilidade daqueles produtos no deposito
                 for (const element of body.venda) {
                     const disponibilidade = await mysql.execute(
                         'SELECT quantidade_em_estoque ' +
@@ -167,7 +163,7 @@ module.exports = () => {
                 }//FOR OF
 
                 if (indisponiveis.length == 0) {
-                    //Realizar Cotacao
+
                     let valorTotal = 0
 
                     for (const element of body.venda) {
@@ -175,7 +171,7 @@ module.exports = () => {
                     }
 
 
-                    //Gerar nota Fiscal de Saida
+
                     const notaFiscal = await mysql.execute(`INSERT INTO notafiscal (NotaFiscal, Tipo, valor)
                         VALUES(?,?,?)`, [
                         `Nota Fiscal de Venda solicitada por ${body.id_filial}`,
@@ -183,15 +179,13 @@ module.exports = () => {
                         valorTotal
                     ])
 
-
-                    //Gerar pedido de venda
                     const pedidoVenda = await mysql.execute('INSERT INTO pedido_venda(' +
                         'Valor_total_venda, ' +
                         'notafiscal_idNotaFiscal)' +
                         'VALUES(?, ?)',
                         [valorTotal, notaFiscal.insertId])
 
-                    //Inserir itens na tabela  item_venda
+
                     for (const element of body.venda) {
                         const insertElementVenda = await mysql.execute(
                             'INSERT INTO item_venda(' +
@@ -215,7 +209,6 @@ module.exports = () => {
                     }
 
                     for (const element of body.venda) {
-                        //Tirar itens do estoque
                         if (element.quantidade > 0) {
                             await mysql.execute('UPDATE produto ' +
                                 'SET quantidade_em_estoque = (quantidade_em_estoque - ?) ' +
@@ -226,7 +219,7 @@ module.exports = () => {
 
                     return { "Mensagem": 'Pedido de venda realizado com sucesso', "Nota_fiscal_venda": notaFiscal_final }
 
-                }//Informar que nao ha aquele produto no deposito e que deve ser feita uma compra
+                }
 
                 throw {
                     "Mensagem": "Alguns dos produtos solicitados esta em falta no estoque, realize a compra",
@@ -235,7 +228,7 @@ module.exports = () => {
                 }
 
             }
-            else { //Enviar apenas os dados sobre disponibilidade
+            else {
 
                 for (const element of body.venda) {
                     const disponibilidade2 = await mysql.execute(
@@ -271,23 +264,62 @@ module.exports = () => {
             }
 
         } catch (error) {
-            console.log(error)
-            return { error: error }
+            throw { error: error }
         }
     }
 
     ///Quando realizar uma solicitacao para consumo interno
     DAO.consumo_interno = async (body) => {
-
         try {
+            let itens = []
 
-            const response = await mysql.execute();
+            //Gerar consumointerno
+            const consumo_interno = await mysql.execute('INSERT INTO consumointerno(quantidade) VALUES (?)', [0]);
 
-            return response;
+            //Select do produto //Validar se ele pertence a aquela filial
+            for (const element of body.consumo_interno) {
+                const produto = await mysql.execute('Select * from produto where idProduto   = ? ', [element.id_produto]);
+                if (produto[0].idProduto != body.id_filial) throw `Voce nao tem permissao para adquirir um dos itens`
+
+                //gerar item_pedido
+                const item_pedido = await mysql.execute('INSERT INTO item_pedido(produto_idProduto, quantidade, consumointerno_idConsumoInterno)  Values (?, ?, ?)',
+                    [produto[0].idProduto, element.quantidade, consumo_interno.insertId]
+                );
+
+                itens.push({
+                    "id_produto": produto[0].idProduto,
+                    "Nome_produto": produto[0].nome,
+                    "Quantidade": element.quantidade,
+                })
+            }
+
+            //Gerar o documento
+            await mysql.execute('Update consumointerno SET quantidade = ?, documento = ?',
+                [
+                    itens.length,
+                    `Solicitado por id_filial ${body.id_filial}, itens: ${itens}`
+                ]
+            )
+
+            //Tirar os itens do banco
+            for (const element of body.consumo_interno) {
+                if (element.quantidade > 0) {
+                    await mysql.execute('UPDATE produto ' +
+                        'SET quantidade_em_estoque = (quantidade_em_estoque - ?) ' +
+                        'WHERE idProduto = ?',
+                        [element.quantidade, element.id_produto])
+                }
+            }
+
+            return {
+                'Id_Solicitacao': consumo_interno.insertId,
+                "Solicitante: ": `Solicitado por id_filial ${body.id_filial}`,
+                "itens": itens
+            };
 
         } catch (error) {
             console.log(error)
-            return { error: error }
+            throw { error: error }
         }
     }
 
@@ -295,7 +327,6 @@ module.exports = () => {
     DAO.perda = async (body) => {
 
         try {
-
             const response = await mysql.execute();
 
             return response;
