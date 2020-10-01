@@ -31,5 +31,27 @@ module.exports = () => {
         }
     }
 
+    DAO.Cotacao_Produto = async () => {
+        try {
+            const query = `UPDATE mydb.Produto SET preco_venda = preco_compra*1.1 WHERE idproduto = ?;`;
+            const result = await mysql.execute(query, [req.params.idproduto])
+            return result
+        } catch (error) {
+            console.log(error)
+            return { error: error }
+        }
+    }
+    
+    DAO.Preco_Medio = async () => {
+        try {
+            const query = `SELECT nome, AVG(preco_venda) AS preco_medio FROM produto WHERE nome = ?;`;
+            const result = await mysql.execute(query, [req.body.nome])
+            return result
+        } catch (error) {
+            console.log(error)
+            return { error: error }
+        }
+    }
+
     return DAO;
 }

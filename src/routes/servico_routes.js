@@ -11,4 +11,7 @@ serviceRoutes.post('/Devolucao', controller.SeDevolucao)
 serviceRoutes.post('/Ajuste', controller.SeAjuste)
 serviceRoutes.get('/ListarDepositos/:id', controller.listarDepositos)
 
+serviceRoutes.get('/CotacaoProduto', controller.Cotacao_Produto)
+serviceRoutes.get('/PrecoMedio', controller.Preco_Medio)
+
 module.exports = serviceRoutes

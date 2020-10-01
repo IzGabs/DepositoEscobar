@@ -88,6 +88,29 @@ module.exports = () => {
         } else req.status(400).send(`INFORME UMA ID`)
     }
 
+    controller.Cotacao_Produto = (req, res) => {
+        console.log('yees')
+        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        dao.Cotacao_Produto()
+        .then((result) => {
+            res.status(200).send(result);
+        })
+        .catch((err) => {
+            res.status(500).send(`ERRO`);
+        });
+    }
+
+    controller.Preco_Medio = (req, res) => {
+        if (req.params.id!=undefined) { return res.status(200).send({ error: error }) }
+        dao.Preco_Medio()
+        .then((result) => {
+            res.status(200).send(result);
+        })
+        .catch((err) => {
+            res.status(500).send(`ERRO`);
+        });
+    }
+
 
 
     return controller;
